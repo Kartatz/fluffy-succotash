@@ -112,7 +112,7 @@ endforeach()
 
 if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
 	target_link_options(
-		sparklec
+		zip
 		BEFORE
 		PRIVATE
 		-Wl,-rpath-link,${CMAKE_SOURCE_DIR}
