@@ -51,6 +51,11 @@ set_target_properties(
 	IMPORTED_LOCATION ${ZLIB_LIBRARY}
 )
 
+add_executable(
+	sparklec
+	src/main.c
+)
+
 if (APPLE)
 	foreach(property BUILD_RPATH INSTALL_RPATH)
 		set_target_properties(
@@ -104,11 +109,6 @@ foreach(target zlib zip)
 		NO_SONAME 1
 	)
 endforeach()
-
-add_executable(
-	sparklec
-	src/main.c
-)
 
 target_link_libraries(
 	sparklec
