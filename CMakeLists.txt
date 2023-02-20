@@ -110,6 +110,15 @@ foreach(target zlib zip)
 	)
 endforeach()
 
+if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+	target_link_options(
+		sparklec
+		BEFORE
+		PRIVATE
+		-Wl,-rpath-link,$<TARGET_FILE_DIR:sparklec>
+	)
+endif()
+
 target_link_libraries(
 	sparklec
 	zip
