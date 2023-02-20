@@ -51,7 +51,53 @@ set_target_properties(
 	IMPORTED_LOCATION ${ZLIB_LIBRARY}
 )
 
-foreach(target zip zlib)
+if (APPLE)
+	foreach(property BUILD_RPATH INSTALL_RPATH)
+		set_target_properties(
+			sparklec
+			PROPERTIES
+			${property} "@loader_path/../lib:@loader_path"
+		)
+	endforeach()
+elseif (UNIX)
+	foreach(property BUILD_RPATH INSTALL_RPATH)
+		set_target_properties(
+			sparklec
+			PROPERTIES
+			${property} "$ORIGIN/../lib:$ORIGIN"
+		)
+	endforeach()
+endif()
+
+if (APPLE)
+	foreach(property BUILD_RPATH INSTALL_RPATH)
+		set_target_properties(
+			zip
+			PROPERTIES
+			${property} "@loader_path"
+		)
+	endforeach()
+elseif (UNIX)
+	foreach(property BUILD_RPATH INSTALL_RPATH)
+		set_target_properties(
+			zip
+			PROPERTIES
+			${property} "$ORIGIN"
+		)
+	endforeach()
+endif()
+
+foreach(property RUNTIME_OUTPUT_DIRECTORY LIBRARY_OUTPUT_DIRECTORY)
+	foreach(target zlib zip)
+		set_target_properties(
+			${target}
+			PROPERTIES
+			${property} $<TARGET_FILE_DIR:sparklec>
+		)
+	endforeach()
+endforeach()
+
+foreach(target zlib zip)
 	set_target_properties(
 		${target}
 		PROPERTIES
@@ -67,5 +113,12 @@ add_executable(
 target_link_libraries(
 	sparklec
 	zip
-	
 )
+
+foreach(target sparklec zlib zip)
+	install(
+		TARGETS ${target}
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION lib NAMELINK_SKIP
+	)
+endforeach()
