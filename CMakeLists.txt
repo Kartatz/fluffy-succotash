@@ -28,7 +28,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
 add_subdirectory(submodules/zlib EXCLUDE_FROM_ALL)
 
 set(ZLIB_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/submodules/zlib")
-set(ZLIB_LIBRARY "${CMAKE_SOURCE_DIR}/libz${CMAKE_SHARED_LIBRARY_SUFFIX}")
+set(ZLIB_LIBRARY "libz${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
 add_subdirectory(submodules/libzip EXCLUDE_FROM_ALL)
 
