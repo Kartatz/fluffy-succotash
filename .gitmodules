@@ -1,0 +1,6 @@
+[submodule "submodules/zlib"]
+	path = submodules/zlib
+	url = https://github.com/madler/zlib
+[submodule "submodules/libzip"]
+	path = submodules/libzip
+	url = https://github.com/nih-at/libzip

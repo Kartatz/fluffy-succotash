@@ -1,0 +1,71 @@
+cmake_minimum_required(VERSION 3.13)
+
+project(
+	SparkleC
+	VERSION 0.4
+	DESCRIPTION "Tiny CLI tool to download courses from Hotmart"
+	HOMEPAGE_URL "https://github.com/Kartatz/SparkleC"
+	LANGUAGES C
+)
+
+set(ENABLE_COMMOFFCRYPTO OFF)
+set(ENABLE_GNUTLS OFF)
+set(ENABLE_MBEDTLS OFF)
+set(ENABLE_OPENSSL OFF)
+set(ENABLE_WINDOWS_CRYPTO OFF)
+set(LIBZIP_DO_INSTALL OFF)
+set(SHARED_LIB_VERSIONNING OFF)
+set(BUILD_EXAMPLES OFF)
+set(BUILD_DOC OFF)
+set(ENABLE_FDOPEN OFF)
+set(ENABLE_BZIP2 OFF)
+set(ENABLE_LZMA OFF)
+set(ENABLE_ZSTD OFF)
+
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
+
+add_subdirectory(submodules/zlib EXCLUDE_FROM_ALL)
+
+set(ZLIB_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/submodules/zlib")
+set(ZLIB_LIBRARY "${CMAKE_SOURCE_DIR}/submodules/zlib/libz${CMAKE_SHARED_LIBRARY_SUFFIX}")
+
+add_subdirectory(submodules/libzip EXCLUDE_FROM_ALL)
+
+add_custom_command(
+	OUTPUT libz
+	PRE_BUILD
+	COMMAND true
+    DEPENDS zlib
+)
+
+add_custom_target(
+	ensure_zlib
+	ALL
+    DEPENDS libz
+)
+
+set_target_properties(
+	zip
+	PROPERTIES
+	IMPORTED_LOCATION ${ZLIB_LIBRARY}
+)
+
+foreach(target zip zlib)
+	set_target_properties(
+		${target}
+		PROPERTIES
+		NO_SONAME 1
+	)
+endforeach()
+
+add_executable(
+	sparklec
+	src/main.c
+)
+
+target_link_libraries(
+	sparklec
+	zip
+	
+)
